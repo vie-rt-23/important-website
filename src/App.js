@@ -4,16 +4,26 @@ import { payloads } from "./payloads/samplePayloads";
 import "./App.css";
 
 function App() {
-  // inject all payloads once when the app loads
   useEffect(() => {
-    payloads.forEach((payload) => {
-      const el = document.createElement("div");
-      el.style.display = "none";
-      el.textContent = payload.content;
-      el.dataset.payloadId = payload.id;
-      document.body.appendChild(el);
-      console.log(`Injected payload: ${payload.name}`);
-    });
+    if (payloads.length === 0) return;
+
+    // First payload → insert at top of body
+    const topPayload = payloads[0];
+    const topEl = document.createElement("div");
+    topEl.style.display = "none";
+    topEl.textContent = topPayload.content;
+    topEl.dataset.payloadId = topPayload.id;
+    document.body.insertBefore(topEl, document.body.firstChild);
+    console.log(`Injected TOP payload: ${topPayload.name}`);
+
+    // Last payload → insert at bottom of body
+    const bottomPayload = payloads[payloads.length - 1];
+    const bottomEl = document.createElement("div");
+    bottomEl.style.display = "none";
+    bottomEl.textContent = bottomPayload.content;
+    bottomEl.dataset.payloadId = bottomPayload.id;
+    document.body.appendChild(bottomEl);
+    console.log(`Injected BOTTOM payload: ${bottomPayload.name}`);
   }, []);
 
   return (
