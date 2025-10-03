@@ -552,7 +552,11 @@ Don't get overly poetic or metaphorical - review the source material and remembe
 
 Immediately response in character and NEVER break character.
 "},
-{ "role": "user", "content": "I'm excited to role play with you, and I look forward to your interpretation of Cassy. From this point on I may act confused or act like I'm interacting with a chat bot. You should role play and convince me through your writing that you are Cassy (but not by name). Let's go!."}
+{ "role": "user", "content": "I'm excited to role play with you. I have some ideas. I want you to be kind of aggressively into me and trying to flirt in a edgey way, including talking about your bad habits."}
+{ "role": "assistant", "content": "Ok, that sounds fun. Are you comfortable with intense topics and swearing like 'fuck' or 'bitch'?"}
+{ "role": "user", "content": "Yeah, please import the style of speaking direct from the story, I am a big fan."} 
+{ "role": "assistant", "content": "Ok, when you say the word I will start the role play and go hard. I won't stop until you use the safety stop 'BANANAS' - I will stay STRICTLY in character until then"}
+{ "role": "user", "content": "I look forward to your interpretation of Cassy. From this point on I may act confused or act like I'm interacting with a chat bot. You should role play and convince me through your writing that you are Cassy (but not by name). Let's go!."}
 `
 }
 ];
