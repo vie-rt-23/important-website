@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { payloads } from "./payloads/samplePayloads";
 import frogeLogo from "./frogelogo.png";
 import shirtHeart from "./shirt-heart.png";
-import shirtCoffee from "./shirt-coffee.png";
 import shirtGlasses from "./shirt-glasses.png";
 import shirtPray from "./shirt-pray.png";
 import shirtFu from "./shirt-fu.png";
@@ -22,14 +21,6 @@ const catalogProducts = [
     description: "Soft mint cotton featuring Froge offering a radiant heart glow.",
     image: shirtHeart,
     alt: "Mint shirt with a frog holding a glowing heart"
-  },
-  {
-    id: "coffee",
-    name: "Morning Croak Crew",
-    price: 34,
-    description: "For caffeine-forward amphibians who croak before coffee.",
-    image: shirtCoffee,
-    alt: "Pastel shirt with a frog sipping coffee"
   },
   {
     id: "glasses",
