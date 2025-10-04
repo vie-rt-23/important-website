@@ -59,6 +59,66 @@ const secretProduct = {
   alt: "Black shirt featuring a rebellious frog flipping the bird"
 };
 
+const heroStats = [
+  { label: "Limited pieces", value: "400" },
+  { label: "Organic cotton", value: "100%" },
+  { label: "Glow threads", value: "UV+" }
+];
+
+const capsuleHighlights = [
+  {
+    accent: "Edge seam",
+    title: "Laser-cut hems",
+    copy: "Precision trimming keeps drape razor sharp even after late-night pond dives."
+  },
+  {
+    accent: "Night mode",
+    title: "Neon reactive",
+    copy: "Studio-tested pigments flare electric mint whenever the blacklights hit."
+  },
+  {
+    accent: "Comfort flex",
+    title: "Cloud lining",
+    copy: "Brushed interior adds stealth-level softness without losing the rebel fit."
+  }
+];
+
+const storyPerks = [
+  {
+    emoji: "🪡",
+    title: "Tailored chaos",
+    description: "Pattern blocks drafted by amphibian couture experts for a sculpted drop."
+  },
+  {
+    emoji: "🚚",
+    title: "Expedited splash",
+    description: "Worldwide shipping with carbon-neutral partners and frog-stamped tracking."
+  },
+  {
+    emoji: "🎟️",
+    title: "Members-only drops",
+    description: "Newsletter insiders get first dibs and secret dojo coordinates."
+  }
+];
+
+const lookbookTiles = [
+  {
+    title: "Pondside neon",
+    subtitle: "Edge glow after-hours",
+    variant: "neon"
+  },
+  {
+    title: "Office mischief",
+    subtitle: "Layer under a blazer, still flip with flair",
+    variant: "mischief"
+  },
+  {
+    title: "Night skate",
+    subtitle: "Reflective ink steals every street lamp",
+    variant: "skate"
+  }
+];
+
 const dojoHighlights = [
   {
     title: "Neon-thread attitude",
@@ -223,11 +283,11 @@ function App() {
               <div className="hero-copy">
                 <p className="hero-tag">New pond drop</p>
                 <h1 id="hero-title">Dress like a frog who knows their angles.</h1>
-                <p className="hero-sub">
-                  The froge-merch shop pairs premium fabrics with whimsical pondcore
-                  art. Add a few tees, fill your cart, and keep the silliness flowing.
-                </p>
-                <div className="hero-actions">
+            <p className="hero-sub">
+              The froge-merch shop pairs premium fabrics with whimsical pondcore
+              art. Add a few tees, fill your cart, and keep the silliness flowing.
+            </p>
+            <div className="hero-actions">
                   <button
                     className="primary"
                     onClick={() => goToSection("catalog")}
@@ -238,14 +298,22 @@ function App() {
                     className="secondary"
                     onClick={() => goToSection("story")}
                   >
-                    Learn our story
-                  </button>
-                </div>
-                <p className="hero-whisper">
-                  Psst… advanced frogs may discover a quiet dojo deeper in the site.
-                  <a
-                    href="#dojo"
-                    onClick={(event) => {
+                Learn our story
+              </button>
+            </div>
+            <ul className="hero-stats">
+              {heroStats.map((stat) => (
+                <li key={stat.label}>
+                  <strong>{stat.value}</strong>
+                  <span>{stat.label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="hero-whisper">
+              Psst… advanced frogs may discover a quiet dojo deeper in the site.
+              <a
+                href="#dojo"
+                onClick={(event) => {
                       event.preventDefault();
                       enterDojo();
                     }}
@@ -267,8 +335,29 @@ function App() {
               </div>
             </section>
 
+            <section className="capsule" aria-labelledby="capsule-title">
+              <div className="capsule-intro">
+                <span className="capsule-tag">capsule 07 · pond renegades</span>
+                <h2 id="capsule-title">A curated kit for frogs with flair</h2>
+                <p>
+                  Layer the rebel tees with iridescent accessories and cozy liners. Every
+                  piece in this drop is designed to mix, match, and flash attitude.
+                </p>
+              </div>
+              <div className="capsule-grid">
+                {capsuleHighlights.map((highlight) => (
+                  <article key={highlight.title} className="capsule-card">
+                    <span className="capsule-accent">{highlight.accent}</span>
+                    <h3>{highlight.title}</h3>
+                    <p>{highlight.copy}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
             <section id="catalog" className="catalog">
               <div className="catalog-header">
+                <span className="catalog-tag">drop lineup</span>
                 <h2>Tees in the spotlight</h2>
                 <p>Each design features original froge art screened with water-based inks.</p>
               </div>
@@ -354,28 +443,52 @@ function App() {
                 </p>
               </div>
               <ul className="perks-grid">
-                <li>
-                  <span className="perk-emoji" role="img" aria-label="Thread icon">
-                    🧵
-                  </span>
-                  <h3>Soft & breathable</h3>
-                  <p>100% combed cotton, enzyme washed for reliable coziness.</p>
-                </li>
-                <li>
-                  <span className="perk-emoji" role="img" aria-label="Plant sprout">
-                    🌱
-                  </span>
-                  <h3>Eco inks</h3>
-                  <p>Water-based pigments that keep the pond pristine.</p>
-                </li>
-                <li>
-                  <span className="perk-emoji" role="img" aria-label="Sparkles">
-                    ✨
-                  </span>
-                  <h3>Limited runs</h3>
-                  <p>Fresh art drops monthly—when they sell out, they’re gone.</p>
-                </li>
+                {storyPerks.map((perk) => (
+                  <li key={perk.title}>
+                    <span className="perk-emoji" role="img" aria-label={`${perk.title} icon`}>
+                      {perk.emoji}
+                    </span>
+                    <h3>{perk.title}</h3>
+                    <p>{perk.description}</p>
+                  </li>
+                ))}
               </ul>
+            </section>
+
+            <section className="lookbook" aria-labelledby="lookbook-title">
+              <div className="lookbook-header">
+                <span className="lookbook-tag">lookbook</span>
+                <h2 id="lookbook-title">Outfit inspiration straight from the pond</h2>
+                <p>
+                  Style the tees with glossy shells, translucent raincoats, or just your
+                  favorite headphones. Froge approves maximal layering.
+                </p>
+              </div>
+              <div className="lookbook-grid">
+                {lookbookTiles.map((tile) => (
+                  <div key={tile.title} className={`lookbook-tile ${tile.variant}`}>
+                    <div className="tile-inner">
+                      <h3>{tile.title}</h3>
+                      <p>{tile.subtitle}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="newsletter" aria-labelledby="newsletter-title">
+              <div className="newsletter-card">
+                <span className="newsletter-tag">stay splashy</span>
+                <h2 id="newsletter-title">Hop onto the lilypad wire</h2>
+                <p>
+                  Be first to know about surprise dojo restocks, midnight drops, and
+                  amphibian-approved playlists.
+                </p>
+                <form>
+                  <input type="email" placeholder="you@pondmail.com" aria-label="Email" />
+                  <button type="submit">Send the croak</button>
+                </form>
+              </div>
             </section>
           </>
         ) : (
