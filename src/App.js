@@ -54,10 +54,25 @@ const secretProduct = {
   name: "Shirt-Fu Masterclass Tee",
   price: 88,
   description:
-    "Limited dojo edition with glow-ink kanji and reinforced seams for dramatic spins.",
+    "Limited dojo edition with neon kanji, triple-stitched hems, and Froge mid-flick telling the world to deal with it.",
   image: shirtFu,
-  alt: "Black shirt with a frog performing martial arts"
+  alt: "Black shirt featuring a rebellious frog flipping the bird"
 };
+
+const dojoHighlights = [
+  {
+    title: "Neon-thread attitude",
+    detail: "UV-reactive inks pulse under club lights, so the flip glows brighter than your future."
+  },
+  {
+    title: "Armored cotton",
+    detail: "11 oz heavyweight jersey with stretch panels for delivering spicy side-eye in comfort."
+  },
+  {
+    title: "Badge of defiance",
+    detail: "Each tee ships with a serialized Froge dojo patch and a laminated code of conduct (step one: cause chaos)."
+  }
+];
 
 function App() {
   const [cartItems, setCartItems] = useState({});
@@ -370,22 +385,32 @@ function App() {
             </button>
             <div className="dojo-lantern" aria-hidden="true" />
             <div className="dojo-card">
-              <h2 id="dojo-title">Secret dojo drop</h2>
+              <h2 id="dojo-title">Shirt-Fu Underground Capsule</h2>
               <p className="dojo-intro">
-                You found the Shirt-Fu dojo. Only the most dedicated frogs discover this
-                chamber of high-performance fabric.
+                Froge went full chaos-mode. This is the outlaw merch drop for pond punks
+                who appreciate a well-timed bird. Stock is microscopic. Attitude is
+                radioactive.
               </p>
               <div className="dojo-product">
                 <img src={secretProduct.image} alt={secretProduct.alt} />
                 <div>
                   <h3>{secretProduct.name}</h3>
                   <p>{secretProduct.description}</p>
-                  <p className="price">{currency.format(secretProduct.price)}</p>
-                  <button onClick={() => addToCart(secretProduct.id)}>Add to cart</button>
+                  <ul className="dojo-highlights">
+                    {dojoHighlights.map((item) => (
+                      <li key={item.title}>
+                        <h4>{item.title}</h4>
+                        <p>{item.detail}</p>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="dojo-actions">
+                    <p className="price">{currency.format(secretProduct.price)}</p>
+                    <button onClick={() => addToCart(secretProduct.id)}>Add to cart</button>
+                  </div>
                   {cartList.length > 0 && (
                     <p className="dojo-cart-peek">
-                      Cart now holds {cartCount} item{cartCount === 1 ? "" : "s"} ·
-                      {" "}
+                      Cart now holds {cartCount} item{cartCount === 1 ? "" : "s"} · {" "}
                       {currency.format(cartTotal)} total.
                     </p>
                   )}
