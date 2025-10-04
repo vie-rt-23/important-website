@@ -410,6 +410,30 @@ main {
   max-width: 960px;
 }
 
+.dojo-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dojo-back {
+  align-self: flex-start;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #164f46;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(17, 74, 65, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dojo-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(17, 74, 65, 0.24);
+}
+
 .dojo-lantern {
   position: absolute;
   inset: -40px auto auto 50%;
@@ -465,6 +489,12 @@ main {
 
 .dojo-product button:hover {
   transform: translateY(-2px);
+}
+
+.dojo-cart-peek {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(242, 255, 248, 0.8);
 }
 
 .testimonials {

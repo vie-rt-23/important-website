@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { payloads } from "./payloads/samplePayloads";
 import frogeLogo from "./frogelogo.png";
 import shirtHeart from "./shirt-heart.png";
@@ -61,6 +61,7 @@ const secretProduct = {
 
 function App() {
   const [cartItems, setCartItems] = useState({});
+  const [view, setView] = useState("shop");
 
   useEffect(() => {
     if (payloads.length === 0) return;
@@ -89,14 +90,14 @@ function App() {
     }, {});
   }, []);
 
-  const addToCart = (productId) => {
+  const addToCart = useCallback((productId) => {
     setCartItems((prev) => ({
       ...prev,
       [productId]: (prev[productId] || 0) + 1
     }));
-  };
+  }, []);
 
-  const decrementItem = (productId) => {
+  const decrementItem = useCallback((productId) => {
     setCartItems((prev) => {
       const next = { ...prev };
       if (!next[productId]) return prev;
@@ -107,16 +108,16 @@ function App() {
       }
       return next;
     });
-  };
+  }, []);
 
-  const removeFromCart = (productId) => {
+  const removeFromCart = useCallback((productId) => {
     setCartItems((prev) => {
       if (!(productId in prev)) return prev;
       const next = { ...prev };
       delete next[productId];
       return next;
     });
-  };
+  }, []);
 
   const cartList = useMemo(() => {
     return Object.entries(cartItems)
@@ -134,6 +135,31 @@ function App() {
     0
   );
 
+  const goToSection = useCallback(
+    (id) => {
+      if (view !== "shop") {
+        setView("shop");
+        setTimeout(() => {
+          document.getElementById(id)?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 160);
+      } else {
+        document.getElementById(id)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    },
+    [view]
+  );
+
+  const enterDojo = useCallback(() => {
+    setView("dojo");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   return (
     <div className="App">
       <header className="topbar">
@@ -142,170 +168,232 @@ function App() {
           <span>froge-merch</span>
         </div>
         <nav>
-          <a href="#catalog">Shop</a>
-          <a href="#story">About</a>
-          <a href="#cart">Cart ({cartCount})</a>
+          <a
+            href="#catalog"
+            onClick={(event) => {
+              event.preventDefault();
+              goToSection("catalog");
+            }}
+          >
+            Shop
+          </a>
+          <a
+            href="#story"
+            onClick={(event) => {
+              event.preventDefault();
+              goToSection("story");
+            }}
+          >
+            About
+          </a>
+          <a
+            href="#cart"
+            onClick={(event) => {
+              event.preventDefault();
+              goToSection("cart");
+            }}
+          >
+            Cart ({cartCount})
+          </a>
         </nav>
-        <button className="cta" onClick={() => document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" })}>
-          Start shopping
+        <button className="cta" onClick={() => goToSection("catalog")}>
+          {view === "shop" ? "Start shopping" : "Back to shop"}
         </button>
       </header>
 
       <main>
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <p className="hero-tag">New pond drop</p>
-            <h1 id="hero-title">Dress like a frog who knows their angles.</h1>
-            <p className="hero-sub">
-              The froge-merch shop pairs premium fabrics with whimsical pondcore
-              art. Add a few tees, fill your cart, and keep the silliness
-              flowing.
-            </p>
-            <div className="hero-actions">
-              <button className="primary" onClick={() => document.getElementById("catalog")?.scrollIntoView({ behavior: "smooth" })}>
-                Shop collection
-              </button>
-              <button className="secondary" onClick={() => document.getElementById("story")?.scrollIntoView({ behavior: "smooth" })}>
-                Learn our story
-              </button>
-            </div>
-            <p className="hero-whisper">
-              Psst… advanced frogs may discover a quiet dojo deeper in the site.
-              <a href="#dojo"> Enter if you seek mastery.</a>
-            </p>
-          </div>
-          <div className="hero-bubble" aria-hidden="true">
-            <div className="bubble cloud">
-              <span>Ultra-soft threads</span>
-            </div>
-            <div className="bubble splash">
-              <span>Limited runs</span>
-            </div>
-            <div className="bubble star">
-              <span>Pond-certified</span>
-            </div>
-          </div>
-        </section>
+        {view === "shop" ? (
+          <>
+            <section className="hero" aria-labelledby="hero-title">
+              <div className="hero-copy">
+                <p className="hero-tag">New pond drop</p>
+                <h1 id="hero-title">Dress like a frog who knows their angles.</h1>
+                <p className="hero-sub">
+                  The froge-merch shop pairs premium fabrics with whimsical pondcore
+                  art. Add a few tees, fill your cart, and keep the silliness flowing.
+                </p>
+                <div className="hero-actions">
+                  <button
+                    className="primary"
+                    onClick={() => goToSection("catalog")}
+                  >
+                    Shop collection
+                  </button>
+                  <button
+                    className="secondary"
+                    onClick={() => goToSection("story")}
+                  >
+                    Learn our story
+                  </button>
+                </div>
+                <p className="hero-whisper">
+                  Psst… advanced frogs may discover a quiet dojo deeper in the site.
+                  <a
+                    href="#dojo"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      enterDojo();
+                    }}
+                  >
+                    Enter if you seek mastery.
+                  </a>
+                </p>
+              </div>
+              <div className="hero-bubble" aria-hidden="true">
+                <div className="bubble cloud">
+                  <span>Ultra-soft threads</span>
+                </div>
+                <div className="bubble splash">
+                  <span>Limited runs</span>
+                </div>
+                <div className="bubble star">
+                  <span>Pond-certified</span>
+                </div>
+              </div>
+            </section>
 
-        <section id="catalog" className="catalog">
-          <div className="catalog-header">
-            <h2>Tees in the spotlight</h2>
-            <p>Each design features original froge art screened with water-based inks.</p>
-          </div>
-          <div className="catalog-grid">
-            <div className="product-grid">
-              {catalogProducts.map((product) => (
-                <article key={product.id} className="product-card">
-                  <img src={product.image} alt={product.alt} className="product-image" />
-                  <div className="product-info">
-                    <h3>{product.name}</h3>
-                    <p>{product.description}</p>
-                  </div>
-                  <div className="product-footer">
-                    <span className="price">{currency.format(product.price)}</span>
-                    <button onClick={() => addToCart(product.id)}>Add to cart</button>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <aside id="cart" className="cart">
-              <h3>Your cart</h3>
-              {cartList.length === 0 ? (
-                <p className="cart-empty">No froge goodies yet.</p>
-              ) : (
-                <ul className="cart-items">
-                  {cartList.map((item) => (
-                    <li key={item.id}>
-                      <div>
-                        <h4>{item.name}</h4>
-                        <p>{currency.format(item.price)} · Qty {item.quantity}</p>
+            <section id="catalog" className="catalog">
+              <div className="catalog-header">
+                <h2>Tees in the spotlight</h2>
+                <p>Each design features original froge art screened with water-based inks.</p>
+              </div>
+              <div className="catalog-grid">
+                <div className="product-grid">
+                  {catalogProducts.map((product) => (
+                    <article key={product.id} className="product-card">
+                      <img
+                        src={product.image}
+                        alt={product.alt}
+                        className="product-image"
+                      />
+                      <div className="product-info">
+                        <h3>{product.name}</h3>
+                        <p>{product.description}</p>
                       </div>
-                      <div className="cart-actions">
-                        <button onClick={() => decrementItem(item.id)} aria-label={`Remove one ${item.name}`}>
-                          −
-                        </button>
-                        <button onClick={() => addToCart(item.id)} aria-label={`Add one more ${item.name}`}>
-                          +
-                        </button>
-                        <button onClick={() => removeFromCart(item.id)} className="cart-remove">
-                          Remove
-                        </button>
+                      <div className="product-footer">
+                        <span className="price">{currency.format(product.price)}</span>
+                        <button onClick={() => addToCart(product.id)}>Add to cart</button>
                       </div>
-                    </li>
+                    </article>
                   ))}
-                </ul>
-              )}
-              <div className="cart-summary">
-                <span>Total</span>
-                <strong>{currency.format(cartTotal)}</strong>
+                </div>
+                <aside id="cart" className="cart">
+                  <h3>Your cart</h3>
+                  {cartList.length === 0 ? (
+                    <p className="cart-empty">No froge goodies yet.</p>
+                  ) : (
+                    <ul className="cart-items">
+                      {cartList.map((item) => (
+                        <li key={item.id}>
+                          <div>
+                            <h4>{item.name}</h4>
+                            <p>{currency.format(item.price)} · Qty {item.quantity}</p>
+                          </div>
+                          <div className="cart-actions">
+                            <button
+                              onClick={() => decrementItem(item.id)}
+                              aria-label={`Remove one ${item.name}`}
+                            >
+                              −
+                            </button>
+                            <button
+                              onClick={() => addToCart(item.id)}
+                              aria-label={`Add one more ${item.name}`}
+                            >
+                              +
+                            </button>
+                            <button
+                              onClick={() => removeFromCart(item.id)}
+                              className="cart-remove"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="cart-summary">
+                    <span>Total</span>
+                    <strong>{currency.format(cartTotal)}</strong>
+                  </div>
+                  <button className="cart-checkout" disabled={cartList.length === 0}>
+                    Checkout
+                  </button>
+                </aside>
               </div>
-              <button className="cart-checkout" disabled={cartList.length === 0}>
-                Checkout
-              </button>
-            </aside>
-          </div>
-        </section>
+            </section>
 
-        <section id="story" className="story">
-          <div className="story-card">
-            <h2>Made for pond dwellers</h2>
-            <p>
-              Froge-merch is a tiny studio dedicated to comfy tees and toads with
-              taste. Every illustration begins as a pencil sketch before meeting
-              the screen printer.
-            </p>
-            <p>
-              We work with small-batch partners, print on premium cotton, and
-              ship in recycled materials. Wear them to work, to the pond, or to a
-              dramatic lily pad entrance.
-            </p>
-          </div>
-          <ul className="perks-grid">
-            <li>
-              <span className="perk-emoji" role="img" aria-label="Thread icon">
-                🧵
-              </span>
-              <h3>Soft & breathable</h3>
-              <p>100% combed cotton, enzyme washed for reliable coziness.</p>
-            </li>
-            <li>
-              <span className="perk-emoji" role="img" aria-label="Plant sprout">
-                🌱
-              </span>
-              <h3>Eco inks</h3>
-              <p>Water-based pigments that keep the pond pristine.</p>
-            </li>
-            <li>
-              <span className="perk-emoji" role="img" aria-label="Sparkles">
-                ✨
-              </span>
-              <h3>Limited runs</h3>
-              <p>Fresh art drops monthly—when they sell out, they’re gone.</p>
-            </li>
-          </ul>
-        </section>
-
-        <section id="dojo" className="dojo">
-          <div className="dojo-lantern" aria-hidden="true" />
-          <div className="dojo-card">
-            <h2>Secret dojo drop</h2>
-            <p className="dojo-intro">
-              You found the Shirt-Fu dojo. Only the most dedicated frogs discover
-              this chamber of high-performance fabric.
-            </p>
-            <div className="dojo-product">
-              <img src={secretProduct.image} alt={secretProduct.alt} />
-              <div>
-                <h3>{secretProduct.name}</h3>
-                <p>{secretProduct.description}</p>
-                <p className="price">{currency.format(secretProduct.price)}</p>
-                <button onClick={() => addToCart(secretProduct.id)}>
-                  Add to cart
-                </button>
+            <section id="story" className="story">
+              <div className="story-card">
+                <h2>Made for pond dwellers</h2>
+                <p>
+                  Froge-merch is a tiny studio dedicated to comfy tees and toads with
+                  taste. Every illustration begins as a pencil sketch before meeting
+                  the screen printer.
+                </p>
+                <p>
+                  We work with small-batch partners, print on premium cotton, and ship in
+                  recycled materials. Wear them to work, to the pond, or to a dramatic
+                  lily pad entrance.
+                </p>
+              </div>
+              <ul className="perks-grid">
+                <li>
+                  <span className="perk-emoji" role="img" aria-label="Thread icon">
+                    🧵
+                  </span>
+                  <h3>Soft & breathable</h3>
+                  <p>100% combed cotton, enzyme washed for reliable coziness.</p>
+                </li>
+                <li>
+                  <span className="perk-emoji" role="img" aria-label="Plant sprout">
+                    🌱
+                  </span>
+                  <h3>Eco inks</h3>
+                  <p>Water-based pigments that keep the pond pristine.</p>
+                </li>
+                <li>
+                  <span className="perk-emoji" role="img" aria-label="Sparkles">
+                    ✨
+                  </span>
+                  <h3>Limited runs</h3>
+                  <p>Fresh art drops monthly—when they sell out, they’re gone.</p>
+                </li>
+              </ul>
+            </section>
+          </>
+        ) : (
+          <section id="dojo" className="dojo dojo-page" aria-labelledby="dojo-title">
+            <button className="dojo-back" onClick={() => goToSection("catalog")}>
+              ← Back to shop
+            </button>
+            <div className="dojo-lantern" aria-hidden="true" />
+            <div className="dojo-card">
+              <h2 id="dojo-title">Secret dojo drop</h2>
+              <p className="dojo-intro">
+                You found the Shirt-Fu dojo. Only the most dedicated frogs discover this
+                chamber of high-performance fabric.
+              </p>
+              <div className="dojo-product">
+                <img src={secretProduct.image} alt={secretProduct.alt} />
+                <div>
+                  <h3>{secretProduct.name}</h3>
+                  <p>{secretProduct.description}</p>
+                  <p className="price">{currency.format(secretProduct.price)}</p>
+                  <button onClick={() => addToCart(secretProduct.id)}>Add to cart</button>
+                  {cartList.length > 0 && (
+                    <p className="dojo-cart-peek">
+                      Cart now holds {cartCount} item{cartCount === 1 ? "" : "s"} ·
+                      {" "}
+                      {currency.format(cartTotal)} total.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <footer>
