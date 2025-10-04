@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useEffect } from "react";
 import { payloads } from "./payloads/samplePayloads";
-import frogeLogo from "../frogelogo.png";
+import frogeLogo from "./frogelogo.png";
 import "./App.css";
 
 const featuredProducts = [
