@@ -13,11 +13,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "prestart": "npm run sync:payloads",
+    "prebuild": "npm run sync:payloads",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
+    "sync:payloads": "node scripts/embedPayloadsInHtml.mjs",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
