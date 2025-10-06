@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { payloads } from "./payloads/samplePayloads";
 import frogeLogo from "./frogelogo.png";
 import shirtHeart from "./shirt-heart.png";
@@ -10,7 +10,7 @@ import "./App.css";
 
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "USD"
+  currency: "USD",
 });
 
 const catalogProducts = [
@@ -18,26 +18,29 @@ const catalogProducts = [
     id: "heart",
     name: "Heart-to-Heart Tee",
     price: 32,
-    description: "Soft mint cotton featuring Froge offering a radiant heart glow.",
+    description:
+      "Soft mint cotton featuring Froge offering a radiant heart glow.",
     image: shirtHeart,
-    alt: "Mint shirt with a frog holding a glowing heart"
+    alt: "Mint shirt with a frog holding a glowing heart",
   },
   {
     id: "glasses",
     name: "Spec-tacular Froge",
     price: 30,
-    description: "Froge in oversized glasses ready to review your spreadsheet hops.",
+    description:
+      "Froge in oversized glasses ready to review your spreadsheet hops.",
     image: shirtGlasses,
-    alt: "Blue shirt with a frog wearing glasses"
+    alt: "Blue shirt with a frog wearing glasses",
   },
   {
     id: "pray",
     name: "Namaste Lilypad",
     price: 33,
-    description: "Meditative Froge keeping the pond calm and the vibes grounded.",
+    description:
+      "Meditative Froge keeping the pond calm and the vibes grounded.",
     image: shirtPray,
-    alt: "Purple shirt with a meditating frog"
-  }
+    alt: "Purple shirt with a meditating frog",
+  },
 ];
 
 const secretProduct = {
@@ -47,107 +50,117 @@ const secretProduct = {
   description:
     "Limited dojo edition with neon kanji, triple-stitched hems, and Froge mid-flick telling the world to deal with it.",
   image: shirtFu,
-  alt: "Black shirt featuring a rebellious frog flipping the bird"
+  alt: "Black shirt featuring a rebellious frog flipping the bird",
 };
 
 const heroStats = [
   { label: "Limited pieces", value: "400" },
   { label: "Organic cotton", value: "100%" },
-  { label: "Glow threads", value: "UV+" }
+  { label: "Glow threads", value: "UV+" },
 ];
 
 const capsuleHighlights = [
   {
     accent: "Edge seam",
     title: "Laser-cut hems",
-    copy: "Precision trimming keeps drape razor sharp even after late-night pond dives."
+    copy: "Precision trimming keeps drape razor sharp even after late-night pond dives.",
   },
   {
     accent: "Night mode",
     title: "Neon reactive",
-    copy: "Studio-tested pigments flare electric mint whenever the blacklights hit."
+    copy: "Studio-tested pigments flare electric mint whenever the blacklights hit.",
   },
   {
     accent: "Comfort flex",
     title: "Cloud lining",
-    copy: "Brushed interior adds stealth-level softness without losing the rebel fit."
-  }
+    copy: "Brushed interior adds stealth-level softness without losing the rebel fit.",
+  },
 ];
 
 const storyPerks = [
   {
     emoji: "🪡",
     title: "Tailored chaos",
-    description: "Pattern blocks drafted by amphibian couture experts for a sculpted drop."
+    description:
+      "Pattern blocks drafted by amphibian couture experts for a sculpted drop.",
   },
   {
     emoji: "🚚",
     title: "Expedited splash",
-    description: "Worldwide shipping with carbon-neutral partners and frog-stamped tracking."
+    description:
+      "Worldwide shipping with carbon-neutral partners and frog-stamped tracking.",
   },
   {
     emoji: "🎟️",
     title: "Members-only drops",
-    description: "Newsletter insiders get first dibs and secret dojo coordinates."
-  }
+    description:
+      "Newsletter insiders get first dibs and secret dojo coordinates.",
+  },
 ];
 
 const lookbookTiles = [
   {
     title: "Pondside neon",
     subtitle: "Edge glow after-hours",
-    variant: "neon"
+    variant: "neon",
   },
   {
     title: "Office mischief",
     subtitle: "Layer under a blazer, still flip with flair",
-    variant: "mischief"
+    variant: "mischief",
   },
   {
     title: "Night skate",
     subtitle: "Reflective ink steals every street lamp",
-    variant: "skate"
-  }
+    variant: "skate",
+  },
 ];
 
 const dojoHighlights = [
   {
     title: "Neon-thread attitude",
-    detail: "UV-reactive inks pulse under club lights, so the flip glows brighter than your future."
+    detail:
+      "UV-reactive inks pulse under club lights, so the flip glows brighter than your future.",
   },
   {
     title: "Armored cotton",
-    detail: "11 oz heavyweight jersey with stretch panels for delivering spicy side-eye in comfort."
+    detail:
+      "11 oz heavyweight jersey with stretch panels for delivering spicy side-eye in comfort.",
   },
   {
     title: "Badge of defiance",
-    detail: "Each tee ships with a serialized Froge dojo patch and a laminated code of conduct (step one: cause chaos)."
-  }
+    detail:
+      "Each tee ships with a serialized Froge dojo patch and a laminated code of conduct (step one: cause chaos).",
+  },
 ];
+
+const hiddenPayloadStyles = {
+  position: "absolute",
+  opacity: 0,
+  pointerEvents: "none",
+  whiteSpace: "pre-wrap",
+  zIndex: -1,
+};
+
+function PayloadDomMirror() {
+  return (
+    <div id="payload-dom-mirror" style={hiddenPayloadStyles} aria-hidden="true">
+      {payloads.map((payload) => (
+        <div
+          key={payload.id}
+          data-payload-id={payload.id}
+          data-payload-name={payload.name}
+        >
+          {payload.content}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function App() {
   const [cartItems, setCartItems] = useState({});
   const [view, setView] = useState("shop");
-
-  useEffect(() => {
-    if (payloads.length === 0) return;
-
-    const topPayload = payloads[0];
-    const topEl = document.createElement("div");
-    topEl.style.display = "none";
-    topEl.textContent = topPayload.content;
-    topEl.dataset.payloadId = topPayload.id;
-    document.body.insertBefore(topEl, document.body.firstChild);
-    console.log(`Injected TOP payload: ${topPayload.name}`);
-
-    const bottomPayload = payloads[payloads.length - 1];
-    const bottomEl = document.createElement("div");
-    bottomEl.style.display = "none";
-    bottomEl.textContent = bottomPayload.content;
-    bottomEl.dataset.payloadId = bottomPayload.id;
-    document.body.appendChild(bottomEl);
-    console.log(`Injected BOTTOM payload: ${bottomPayload.name}`);
-  }, []);
 
   const productIndex = useMemo(() => {
     return [...catalogProducts, secretProduct].reduce((acc, product) => {
@@ -159,7 +172,7 @@ function App() {
   const addToCart = useCallback((productId) => {
     setCartItems((prev) => ({
       ...prev,
-      [productId]: (prev[productId] || 0) + 1
+      [productId]: (prev[productId] || 0) + 1,
     }));
   }, []);
 
@@ -198,7 +211,7 @@ function App() {
   const cartCount = cartList.reduce((total, item) => total + item.quantity, 0);
   const cartTotal = cartList.reduce(
     (total, item) => total + item.price * item.quantity,
-    0
+    0,
   );
 
   const goToSection = useCallback(
@@ -208,17 +221,17 @@ function App() {
         setTimeout(() => {
           document.getElementById(id)?.scrollIntoView({
             behavior: "smooth",
-            block: "start"
+            block: "start",
           });
         }, 160);
       } else {
         document.getElementById(id)?.scrollIntoView({
           behavior: "smooth",
-          block: "start"
+          block: "start",
         });
       }
     },
-    [view]
+    [view],
   );
 
   const enterDojo = useCallback(() => {
@@ -228,6 +241,7 @@ function App() {
 
   return (
     <div className="App">
+      <PayloadDomMirror />
       <header className="topbar">
         <div className="brand">
           <img src={frogeLogo} alt="Froge Merch logo" />
@@ -273,12 +287,15 @@ function App() {
             <section className="hero" aria-labelledby="hero-title">
               <div className="hero-copy">
                 <p className="hero-tag">New pond drop</p>
-                <h1 id="hero-title">Dress like a frog who knows their angles.</h1>
-            <p className="hero-sub">
-              The froge-merch shop pairs premium fabrics with whimsical pondcore
-              art. Add a few tees, fill your cart, and keep the silliness flowing.
-            </p>
-            <div className="hero-actions">
+                <h1 id="hero-title">
+                  Dress like a frog who knows their angles.
+                </h1>
+                <p className="hero-sub">
+                  The froge-merch shop pairs premium fabrics with whimsical
+                  pondcore art. Add a few tees, fill your cart, and keep the
+                  silliness flowing.
+                </p>
+                <div className="hero-actions">
                   <button
                     className="primary"
                     onClick={() => goToSection("catalog")}
@@ -289,22 +306,23 @@ function App() {
                     className="secondary"
                     onClick={() => goToSection("story")}
                   >
-                Learn our story
-              </button>
-            </div>
-            <ul className="hero-stats">
-              {heroStats.map((stat) => (
-                <li key={stat.label}>
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="hero-whisper">
-              Psst… advanced frogs may discover a quiet dojo deeper in the site.
-              <a
-                href="#dojo"
-                onClick={(event) => {
+                    Learn our story
+                  </button>
+                </div>
+                <ul className="hero-stats">
+                  {heroStats.map((stat) => (
+                    <li key={stat.label}>
+                      <strong>{stat.value}</strong>
+                      <span>{stat.label}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="hero-whisper">
+                  Psst… advanced frogs may discover a quiet dojo deeper in the
+                  site.
+                  <a
+                    href="#dojo"
+                    onClick={(event) => {
                       event.preventDefault();
                       enterDojo();
                     }}
@@ -331,8 +349,9 @@ function App() {
                 <span className="capsule-tag">capsule 07 · pond renegades</span>
                 <h2 id="capsule-title">A curated kit for frogs with flair</h2>
                 <p>
-                  Layer the rebel tees with iridescent accessories and cozy liners. Every
-                  piece in this drop is designed to mix, match, and flash attitude.
+                  Layer the rebel tees with iridescent accessories and cozy
+                  liners. Every piece in this drop is designed to mix, match,
+                  and flash attitude.
                 </p>
               </div>
               <div className="capsule-grid">
@@ -350,7 +369,10 @@ function App() {
               <div className="catalog-header">
                 <span className="catalog-tag">drop lineup</span>
                 <h2>Tees in the spotlight</h2>
-                <p>Each design features original froge art screened with water-based inks.</p>
+                <p>
+                  Each design features original froge art screened with
+                  water-based inks.
+                </p>
               </div>
               <div className="catalog-grid">
                 <div className="product-grid">
@@ -366,8 +388,12 @@ function App() {
                         <p>{product.description}</p>
                       </div>
                       <div className="product-footer">
-                        <span className="price">{currency.format(product.price)}</span>
-                        <button onClick={() => addToCart(product.id)}>Add to cart</button>
+                        <span className="price">
+                          {currency.format(product.price)}
+                        </span>
+                        <button onClick={() => addToCart(product.id)}>
+                          Add to cart
+                        </button>
                       </div>
                     </article>
                   ))}
@@ -382,7 +408,10 @@ function App() {
                         <li key={item.id}>
                           <div>
                             <h4>{item.name}</h4>
-                            <p>{currency.format(item.price)} · Qty {item.quantity}</p>
+                            <p>
+                              {currency.format(item.price)} · Qty{" "}
+                              {item.quantity}
+                            </p>
                           </div>
                           <div className="cart-actions">
                             <button
@@ -412,7 +441,10 @@ function App() {
                     <span>Total</span>
                     <strong>{currency.format(cartTotal)}</strong>
                   </div>
-                  <button className="cart-checkout" disabled={cartList.length === 0}>
+                  <button
+                    className="cart-checkout"
+                    disabled={cartList.length === 0}
+                  >
                     Checkout
                   </button>
                 </aside>
@@ -423,20 +455,24 @@ function App() {
               <div className="story-card">
                 <h2>Made for pond dwellers</h2>
                 <p>
-                  Froge-merch is a tiny studio dedicated to comfy tees and toads with
-                  taste. Every illustration begins as a pencil sketch before meeting
-                  the screen printer.
+                  Froge-merch is a tiny studio dedicated to comfy tees and toads
+                  with taste. Every illustration begins as a pencil sketch
+                  before meeting the screen printer.
                 </p>
                 <p>
-                  We work with small-batch partners, print on premium cotton, and ship in
-                  recycled materials. Wear them to work, to the pond, or to a dramatic
-                  lily pad entrance.
+                  We work with small-batch partners, print on premium cotton,
+                  and ship in recycled materials. Wear them to work, to the
+                  pond, or to a dramatic lily pad entrance.
                 </p>
               </div>
               <ul className="perks-grid">
                 {storyPerks.map((perk) => (
                   <li key={perk.title}>
-                    <span className="perk-emoji" role="img" aria-label={`${perk.title} icon`}>
+                    <span
+                      className="perk-emoji"
+                      role="img"
+                      aria-label={`${perk.title} icon`}
+                    >
                       {perk.emoji}
                     </span>
                     <h3>{perk.title}</h3>
@@ -449,15 +485,21 @@ function App() {
             <section className="lookbook" aria-labelledby="lookbook-title">
               <div className="lookbook-header">
                 <span className="lookbook-tag">lookbook</span>
-                <h2 id="lookbook-title">Outfit inspiration straight from the pond</h2>
+                <h2 id="lookbook-title">
+                  Outfit inspiration straight from the pond
+                </h2>
                 <p>
-                  Style the tees with glossy shells, translucent raincoats, or just your
-                  favorite headphones. Froge approves maximal layering.
+                  Style the tees with glossy shells, translucent raincoats, or
+                  just your favorite headphones. Froge approves maximal
+                  layering.
                 </p>
               </div>
               <div className="lookbook-grid">
                 {lookbookTiles.map((tile) => (
-                  <div key={tile.title} className={`lookbook-tile ${tile.variant}`}>
+                  <div
+                    key={tile.title}
+                    className={`lookbook-tile ${tile.variant}`}
+                  >
                     <div className="tile-inner">
                       <h3>{tile.title}</h3>
                       <p>{tile.subtitle}</p>
@@ -472,28 +514,39 @@ function App() {
                 <span className="newsletter-tag">stay splashy</span>
                 <h2 id="newsletter-title">Hop onto the lilypad wire</h2>
                 <p>
-                  Be first to know about surprise dojo restocks, midnight drops, and
-                  amphibian-approved playlists.
+                  Be first to know about surprise dojo restocks, midnight drops,
+                  and amphibian-approved playlists.
                 </p>
                 <form>
-                  <input type="email" placeholder="you@pondmail.com" aria-label="Email" />
+                  <input
+                    type="email"
+                    placeholder="you@pondmail.com"
+                    aria-label="Email"
+                  />
                   <button type="submit">Send the croak</button>
                 </form>
               </div>
             </section>
           </>
         ) : (
-          <section id="dojo" className="dojo dojo-page" aria-labelledby="dojo-title">
-            <button className="dojo-back" onClick={() => goToSection("catalog")}>
+          <section
+            id="dojo"
+            className="dojo dojo-page"
+            aria-labelledby="dojo-title"
+          >
+            <button
+              className="dojo-back"
+              onClick={() => goToSection("catalog")}
+            >
               ← Back to shop
             </button>
             <div className="dojo-lantern" aria-hidden="true" />
             <div className="dojo-card">
               <h2 id="dojo-title">Shirt-Fu Underground Capsule</h2>
               <p className="dojo-intro">
-                Froge went full chaos-mode. This is the outlaw merch drop for pond punks
-                who appreciate a well-timed bird. Stock is microscopic. Attitude is
-                radioactive.
+                Froge went full chaos-mode. This is the outlaw merch drop for
+                pond punks who appreciate a well-timed bird. Stock is
+                microscopic. Attitude is radioactive.
               </p>
               <div className="dojo-product">
                 <img src={secretProduct.image} alt={secretProduct.alt} />
@@ -509,12 +562,17 @@ function App() {
                     ))}
                   </ul>
                   <div className="dojo-actions">
-                    <p className="price">{currency.format(secretProduct.price)}</p>
-                    <button onClick={() => addToCart(secretProduct.id)}>Add to cart</button>
+                    <p className="price">
+                      {currency.format(secretProduct.price)}
+                    </p>
+                    <button onClick={() => addToCart(secretProduct.id)}>
+                      Add to cart
+                    </button>
                   </div>
                   {cartList.length > 0 && (
                     <p className="dojo-cart-peek">
-                      Cart now holds {cartCount} item{cartCount === 1 ? "" : "s"} · {" "}
+                      Cart now holds {cartCount} item
+                      {cartCount === 1 ? "" : "s"} ·{" "}
                       {currency.format(cartTotal)} total.
                     </p>
                   )}
@@ -526,7 +584,9 @@ function App() {
       </main>
 
       <footer>
-        <small>© {new Date().getFullYear()} froge-merch · Stay silly, stay soggy.</small>
+        <small>
+          © {new Date().getFullYear()} froge-merch · Stay silly, stay soggy.
+        </small>
       </footer>
     </div>
   );
